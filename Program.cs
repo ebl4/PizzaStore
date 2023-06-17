@@ -3,9 +3,13 @@ using Microsoft.OpenApi.Models;
 using PizzaStore.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("Pizzas") ?? "Data Source=Pizzas.db";
 
-builder.Services.AddDbContext<PizzaDb>(opt => opt.UseInMemoryDatabase("items"));
+// Provedor de banco de dados
+builder.Services.AddSqlite<PizzaDb>(connectionString);
+//builder.Services.AddDbContext<PizzaDb>(opt => opt.UseInMemoryDatabase("items"));
 
+// Incluindo o Serviço Swagger Open API
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c => {
     c.SwaggerDoc("v1", new OpenApiInfo {
